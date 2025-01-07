@@ -1,0 +1,21 @@
+.terraform/
+**/.terraform/
+.terraform.lock.hcl
+.idea/
+
+# Lokale Terraform-Statusdateien
+*.tfstate
+*.tfstate.backup
+
+# Crash-Logs von Terraform
+crash.log
+
+# Sensible Terraform-Umgebungsdateien
+terraform.tfvars
+terraform.tfvars.json
+
+# Terraform-Provider-Cache
+.terraform.lock.hcl
+
+# Ignore Terraform Plan Outputs
+*.tfplan
