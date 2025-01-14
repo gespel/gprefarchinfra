@@ -15,9 +15,9 @@
 #  set_fact:
 #    local_ip: "{{ ansible_facts['default_ipv4']['address'] }}"
 
-#- name: Print hostname
-#  ansible.builtin.debug:
-#    msg: "Host {{ node_name }} -> {{ local_ip }}"
+- name: Print hostname
+  ansible.builtin.debug:
+    msg: "Host {{ node_name }}"
 
 #- name: Print all nodes
 #  ansible.builtin.debug:
