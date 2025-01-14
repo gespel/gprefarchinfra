@@ -1,3 +1,8 @@
+variable "cluster-name" {
+  description = "Name of the cluster"
+  type = string
+}
+
 variable "gcloud_region" {
   description = "The region the cluster is supposed to be allocated"
   type        = string
@@ -75,7 +80,7 @@ resource "google_compute_instance" "etcd" {
 
 resource "google_compute_instance" "patroni_node" {
   count        = 2
-  name         = "patroni-${count.index + 1}"
+  name         = "postgres-${count.index + 1}"
   machine_type = "${var.gcloud_machine_type_main}"
 
   scheduling {
