@@ -7,11 +7,6 @@ galaxy_info:
 
 dependencies:
 
-platforms:
-  - name: OpenSUSE
-    versions:
-      - "15"
-
 galaxy_tags:
   - postgres
   - patroni
