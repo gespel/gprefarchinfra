@@ -93,7 +93,7 @@
         content: |
           ETCD_NAME={{ node_name }}
           ##ETCD_DATA_DIR=/var/lib/etcd
-          ETCD_INITIAL_CLUSTER=patroni-1=http://patroni-1:2380,patroni-2=http://patroni-2:2380,etcd-3=http://etcd-3:2380
+          ETCD_INITIAL_CLUSTER=postgres-1=http://postgres-1:2380,postgres-2=http://postgres-2:2380,etcd-3=http://etcd-3:2380
           ETCD_INITIAL_ADVERTISE_PEER_URLS=http://{{ local_ip }}:2380
           ETCD_ADVERTISE_CLIENT_URLS=http://{{ local_ip }}:2379
           ETCD_LISTEN_PEER_URLS=http://0.0.0.0:2380
