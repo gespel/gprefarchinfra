@@ -23,10 +23,15 @@ variable "gcloud_machine_type_etcd" {
   type        = string 
 }
 
+variable "gcloud_zones" {
+  description = "list of zones for the instances"
+  type        = list(string)
+}
+
 provider "google" {
   project = var.gcloud_project
   region  = var.gcloud_region
-  zone    = "${var.gcloud_region}-a"
+  //zone    = var.gcloud_region
 }
 
 resource "google_compute_firewall" "allow-internal-and-ssh" {
@@ -44,6 +49,7 @@ resource "google_compute_instance" "etcd" {
   count        = 1
   name         = "etcd-3"
   machine_type = var.gcloud_machine_type_etcd
+  zone         = var.gcloud_zones[2]
 
   scheduling {
     preemptible       = true
@@ -82,6 +88,7 @@ resource "google_compute_instance" "patroni_node" {
   count        = 2
   name         = "postgres-${count.index + 1}"
   machine_type = var.gcloud_machine_type_main
+  zone         = var.gcloud_zones[count.index]
 
   scheduling {
     preemptible       = true
