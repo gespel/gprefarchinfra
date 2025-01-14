@@ -24,8 +24,8 @@ variable "gcloud_machine_type_etcd" {
 }
 
 provider "google" {
-  project = "${var.gcloud_project}"
-  region  = "${var.gcloud_region}"
+  project = var.gcloud_project
+  region  = var.gcloud_region
   zone    = "${var.gcloud_region}-a"
 }
 
@@ -37,13 +37,13 @@ resource "google_compute_firewall" "allow-internal-and-ssh" {
     ports    = ["22", "5432", "8008", "2379", "2380"] 
   }
   source_ranges = ["0.0.0.0/0"] 
-  target_tags   = ["patroni-cluster"]
+  target_tags   = [var.cluster-name]
 }
 
 resource "google_compute_instance" "etcd" {
   count        = 1
   name         = "etcd-3"
-  machine_type = "${var.gcloud_machine_type_etcd}"
+  machine_type = var.gcloud_machine_type_etcd
 
   scheduling {
     preemptible       = true
@@ -66,7 +66,7 @@ resource "google_compute_instance" "etcd" {
     email  = "image-puller@gp-dssi.iam.gserviceaccount.com"
     scopes = ["https://www.googleapis.com/auth/cloud-platform"]
   }
-  tags = ["patroni-cluster"]
+  tags = [var.cluster-name]
 
 
   metadata_startup_script = <<-EOT
@@ -81,7 +81,7 @@ resource "google_compute_instance" "etcd" {
 resource "google_compute_instance" "patroni_node" {
   count        = 2
   name         = "postgres-${count.index + 1}"
-  machine_type = "${var.gcloud_machine_type_main}"
+  machine_type = var.gcloud_machine_type_main
 
   scheduling {
     preemptible       = true
@@ -104,7 +104,7 @@ resource "google_compute_instance" "patroni_node" {
     email  = "image-puller@gp-dssi.iam.gserviceaccount.com"
     scopes = ["https://www.googleapis.com/auth/cloud-platform"]
   }
-  tags = ["patroni-cluster"]
+  tags = ["${var.cluster-name}"]
 
   metadata_startup_script = <<-EOT
     #!/bin/bash
