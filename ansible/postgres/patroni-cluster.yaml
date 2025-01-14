@@ -7,27 +7,27 @@
     - name: Wait 600 seconds for target connection to become reachable/usable
       ansible.builtin.wait_for_connection:
 
-    - name: Gather facts
-      ansible.builtin.setup:
+    #- name: Gather facts
+    #  ansible.builtin.setup:
       
-    - name: Set local_ip to GCP internal IP
-      set_fact:
-        local_ip: "{{ ansible_facts['default_ipv4']['address'] }}"
+    #- name: Set local_ip to GCP internal IP
+    #  set_fact:
+    #    local_ip: "{{ ansible_facts['default_ipv4']['address'] }}"
 
     - name: Set node_name to hostname
       set_fact:
         node_name: "{{ ansible_facts['hostname'] }}"
-    - name: Set local_ip to GCP internal IP
-      set_fact:
-        local_ip: "{{ ansible_facts['default_ipv4']['address'] }}"
+    #- name: Set local_ip to GCP internal IP
+    #  set_fact:
+    #    local_ip: "{{ ansible_facts['default_ipv4']['address'] }}"
 
-    - name: Print hostname
-      ansible.builtin.debug:
-        msg: "Host {{ node_name }} -> {{ local_ip }}"
+    #- name: Print hostname
+    #  ansible.builtin.debug:
+    #    msg: "Host {{ node_name }} -> {{ local_ip }}"
 
-    - name: Print all nodes
-      ansible.builtin.debug:
-        msg: "{{ groups['all'] }}"
+    #- name: Print all nodes
+    #  ansible.builtin.debug:
+    #    msg: "{{ groups['all'] }}"
 
     #- name: Download etcd
     #  ansible.builtin.get_url:
