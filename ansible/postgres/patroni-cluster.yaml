@@ -14,9 +14,9 @@
     #  set_fact:
     #    local_ip: "{{ ansible_facts['default_ipv4']['address'] }}"
 
-    - name: Set node_name to hostname
-      set_fact:
-        node_name: "{{ ansible_facts['hostname'] }}"
+    #- name: Set node_name to hostname
+    #  set_fact:
+    #    node_name: "{{ ansible_facts['hostname'] }}"
     #- name: Set node_name to hostname
     #  set_fact:
     #    node_name: "{{ inventory_hostname }}"
