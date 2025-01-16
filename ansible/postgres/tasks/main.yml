@@ -11,9 +11,9 @@
 - name: Set node_name to hostname
   set_fact:
     node_name: "{{ ansible_facts['hostname'] }}"
-#- name: Set local_ip to GCP internal IP
-#  set_fact:
-#    local_ip: "{{ ansible_facts['default_ipv4']['address'] }}"
+- name: Set local_ip to GCP internal IP
+  set_fact:
+    local_ip: "{{ ansible_facts['default_ipv4']['address'] }}"
 
 - name: Print hostname
   ansible.builtin.debug:
