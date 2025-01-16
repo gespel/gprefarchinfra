@@ -1,8 +1,8 @@
 - name: Wait 600 seconds for target connection to become reachable/usable
   ansible.builtin.wait_for_connection:
 
-#- name: Gather facts
-#  ansible.builtin.setup:
+- name: Gather facts
+  ansible.builtin.setup:
 
 #- name: Set local_ip to GCP internal IP
 #  set_fact:
