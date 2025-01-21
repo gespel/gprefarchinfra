@@ -34,7 +34,7 @@ provider "google" {
   //zone    = var.gcloud_region
 }
 
-resource "google_compute_firewall" "allow-internal-and-ssh" {
+resource "google_compute_firewall" "patroni-firewall" {
   name    = "allow-internal-and-ssh"
   network = "default"
   allow {

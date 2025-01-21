@@ -10,4 +10,4 @@ compose:
   # set the ansible_host variable to connect with the private IP address without changing the hostname
   ansible_host: name
 filters:
-  - "name = patroni-1 OR name = patroni-2 OR name = etcd-3"
+  - "name = postgres-1 OR name = postgres-2 OR name = etcd-3"
