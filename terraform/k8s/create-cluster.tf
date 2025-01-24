@@ -1,33 +1,40 @@
-//resource "random_id" "bucket_prefix" {
-//  byte_length = 8
-//}
+variable "cluster-name" {
+  description = "Name of the cluster"
+  type = string
+}
 
-//resource "google_storage_bucket" "default" {
-//  name          = "${random_id.bucket_prefix.hex}-bucket-tfstate"
-//  force_destroy = false
-//  location      = "EU"
-//  storage_class = "STANDARD"
-//  versioning {
-//    enabled = true
-//  }
-//  encryption {
-//    default_kms_key_name = google_kms_crypto_key.terraform_state_bucket.id
-//  }
-//  depends_on = [
-//    google_project_iam_member.default
-//  ]
-//}
+variable "gcloud_region" {
+  description = "The region the cluster is supposed to be allocated"
+  type        = string
+}
 
+variable "gcloud_project" {
+  description = "The project of the cluster"
+  type        = string
+}
+
+variable "gcloud_machine_type_main" {
+  description = "Type of the main postgres machines"
+  type        = string
+}
+variable "gccloud_node_counte" {
+  description = "Number of K8s nodes to be created"
+  type        = number
+}
+variable "gcloud_zones" {
+  description = "list of zones for the instances"
+  type        = list(string)
+}
 //===========================================================
 provider "google" {
-  project = "gp-dssi"
-  region  = "europe-west3"
+  project = var.gcloud_project
+  region  = var.gcloud_region
 }
 
 resource "google_container_cluster" "primary" {
   deletion_protection = false
-  name                = "psi-default-cluster"
-  location            = "europe-west3-b"
+  name                = var.cluster-name
+  location            = var.gcloud_zones[0]
 
   initial_node_count = 1
 
@@ -42,7 +49,7 @@ resource "google_container_node_pool" "primary_nodes" {
 
   node_config {
     spot = true
-    machine_type = "e2-standard-4"
+    machine_type = var.gcloud_machine_type_main
   }
 }
 
@@ -59,7 +66,7 @@ provider "helm" {
 
 resource "null_resource" "get_credentials" {
   provisioner "local-exec" {
-    command = "gcloud container clusters get-credentials psi-gp-cluster --region europe-west3-b"
+    command = "gcloud container clusters get-credentials psi-default-cluster"
   }
 
   depends_on = [
