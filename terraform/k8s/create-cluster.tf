@@ -17,7 +17,7 @@ variable "gcloud_machine_type_main" {
   description = "Type of the main postgres machines"
   type        = string
 }
-variable "gccloud_node_count" {
+variable "gcloud_node_count" {
   description = "Number of K8s nodes to be created"
   type        = number
 }
@@ -45,7 +45,7 @@ resource "google_container_node_pool" "primary_nodes" {
   cluster  = google_container_cluster.primary.name
   location = google_container_cluster.primary.location
   name     = "primary-node-pool"
-  node_count = var.gccloud_node_count
+  node_count = var.gcloud_node_count
 
   node_config {
     spot = true
