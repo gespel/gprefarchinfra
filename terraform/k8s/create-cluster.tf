@@ -66,7 +66,7 @@ provider "helm" {
 
 resource "null_resource" "get_credentials" {
   provisioner "local-exec" {
-    command = "gcloud container clusters get-credentials " + var.cluster-name
+    command = format("gcloud container clusters get-credentials %s", var.cluster-name)
   }
 
   depends_on = [
