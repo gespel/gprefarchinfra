@@ -19,8 +19,8 @@ provider "helm" {
   }
 }
 
-provider "random" {
-}
+/*provider "random" {
+}*/
 
 resource "random_string" "token" {
   length  = 32
