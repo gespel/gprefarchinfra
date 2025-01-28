@@ -4,7 +4,7 @@ provider "google" {
   //zone    = var.gcloud_region
 }
 
-resource "google_compute_instance" "etcd" {
+resource "google_compute_instance" "oop-wrtier-vm" {
   count        = 1
   name         = "oop-writer-vm"
   machine_type = "e2-standard-2"
@@ -32,13 +32,4 @@ resource "google_compute_instance" "etcd" {
     scopes = ["https://www.googleapis.com/auth/cloud-platform"]
   }
   tags = ["oop-writer-vm"]
-
-
-  metadata_startup_script = <<-EOT
-    #!/bin/bash
-    # Aktivieren des Schreibmodus für das Root-Dateisystem
-    mount -o remount,rw /
-
-    sudo snap install docker
-  EOT
 }
