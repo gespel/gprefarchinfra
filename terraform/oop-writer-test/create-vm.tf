@@ -1,0 +1,44 @@
+provider "google" {
+  project = "GP-DSSI"
+  region  = "europe-west10"
+  //zone    = var.gcloud_region
+}
+
+resource "google_compute_instance" "etcd" {
+  count        = 1
+  name         = "oop-writer-vm"
+  machine_type = "e2-standard-2"
+  zone         = "europe-west10-a"
+
+  scheduling {
+    preemptible       = true
+    automatic_restart = false # Bei preemptible muss dies auf false gesetzt sein
+  }
+
+  boot_disk {
+    initialize_params {
+      image = "opensuse-leap-15-6-v20241004-x86-64"
+    }
+  }
+
+  network_interface {
+    network = "default"
+
+    access_config {
+    }
+  }
+  service_account {
+    email  = "image-puller@gp-dssi.iam.gserviceaccount.com"
+    scopes = ["https://www.googleapis.com/auth/cloud-platform"]
+  }
+  tags = ["oop-writer-vm"]
+
+
+  metadata_startup_script = <<-EOT
+    #!/bin/bash
+    # Aktivieren des Schreibmodus für das Root-Dateisystem
+    mount -o remount,rw /
+
+    sudo snap install docker
+  EOT
+}
