@@ -68,9 +68,9 @@ module "init_jobs" {
 module "reverse_proxy" {
   source     = "./networking/nginx-reverse-proxy"
   depends_on = [module.apps]
-}
+}*/
 
 module "prometheus" {
   source     = "./logging/prometheus"
   depends_on = [module.init_jobs]
-}*/
+}
