@@ -1,5 +1,5 @@
 provider "google" {
-  project = "GP-DSSI"
+  project = "gp-dssi"
   region  = "europe-west10"
   //zone    = var.gcloud_region
 }
