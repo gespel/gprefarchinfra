@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: logstash-config
+  namespace: default
+data:
+  logstash.yml: |
+    http.host: "0.0.0.0"
+    path.config: /usr/share/logstash/config/logstash.conf
+  logstash.conf: |
+    input {
+      beats {
+        port => 5044
+      }
+    }
+
+    output {
+      stdout {
+        codec => rubydebug
+      }
+      opensearch {
+        hosts  => ["https://opensearch:9200"]
+        auth_type => {
+            type => 'basic'
+            user => 'admin'
+            password => '${OPENSEARCH_PASSWORD}'
+        }
+        index => "psi-sample-log-stream"
+        action => "create"
+        ssl_certificate_verification => false
+      }
+    }

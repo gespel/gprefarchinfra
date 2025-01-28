@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opensearch
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: opensearch
+      name: opensearch
+  template:
+    metadata:
+      labels:
+        app: opensearch
+        name: opensearch
+    spec:
+      # Setting the max_map_count is not allowed in a GCP auto scale cluster
+      initContainers:
+        - name: increase-the-vm-max-map-count
+          image: busybox
+          command:
+          - sysctl
+          - -w
+          - vm.max_map_count=262144
+          securityContext:
+            privileged: true
+            runAsUser: 0
+        - name: increase-the-ulimit
+          image: busybox
+          command:
+          - sh
+          - -c
+          - ulimit -n 65536
+          securityContext:
+            privileged: true
+            runAsUser: 0    
+      containers:
+        - name: opensearch
+          image: opensearchproject/opensearch:2.13.0
+          env:
+            - name: cluster.name
+              value: opensearch-cluster
+            - name: node.name
+              value: opensearch
+            - name: discovery.seed_hosts
+              value: opensearch
+            - name: cluster.initial_master_nodes
+              value: opensearch
+            - name: bootstrap.memory_lock
+              value: "false"
+            #- name: plugins.security.disabled
+            #  value: "true"
+            - name: OPENSEARCH_JAVA_OPTS
+              value: "-Xms512m -Xmx512m"
+            - name: OPENSEARCH_INITIAL_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: opensearch
+                  key: password
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "4Gi"
+            limits:
+              cpu: "800m"
+              memory: "4Gi"
+          securityContext:
+            privileged: false
+            capabilities:
+              add:
+                - IPC_LOCK
+              drop:
+                - ALL
+            readOnlyRootFilesystem: false
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+          ports:
+            - containerPort: 9200
+            - containerPort: 9600
+          volumeMounts:
+            - name: opensearch-data1
+              mountPath: /usr/share/opensearch/data
+      volumes:
+        - name: opensearch-data1
+          emptyDir: {}

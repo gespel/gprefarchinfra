@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: logstash
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: logstash
+  template:
+    metadata:
+      labels:
+        name: logstash
+    spec:
+      containers:
+      - name: logstash
+        image: docker.elastic.co/logstash/logstash:8.13.0
+        env:
+          - name: OPENSEARCH_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: opensearch
+                key: password
+        command: ["bash", "-c", "bin/logstash-plugin install logstash-output-opensearch && sleep 5 && logstash"]
+        volumeMounts:
+        - name: logstash-config
+          mountPath: /usr/share/logstash/config
+          readOnly: true
+      volumes:
+      - name: logstash-config
+        configMap:
+          name: logstash-config
+          items:
+          - key: "logstash.yml"
+            path: "logstash.yml"
+          - key: "logstash.conf"
+            path: "logstash.conf"

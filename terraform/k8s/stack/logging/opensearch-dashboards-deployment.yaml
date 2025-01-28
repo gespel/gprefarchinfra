@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opensearch-dashboards
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: opensearch-dashboards
+      app: opensearch-dashboards
+  template:
+    metadata:
+      labels:
+        name: opensearch-dashboards
+        app: opensearch-dashboards
+    spec:
+      containers:
+        - name: opensearch-dashboards
+          image: opensearchproject/opensearch-dashboards:2.0.1
+          ports:
+            - containerPort: 5601
+          env:
+            - name: OPENSEARCH_HOSTS
+              value: https://opensearch:9200
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 5601
+            initialDelaySeconds: 60
+            periodSeconds: 30

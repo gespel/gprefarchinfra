@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: opensearch-dashboards-init
+  namespace: default
+spec:
+  template:
+    metadata:
+      labels:
+        job-name: opensearch-dashboards-init
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: opensearch-dashboards-init
+          image: europe-west10-docker.pkg.dev/gp-dssi/psi-docker-registry/psigms/opensearch-dashboards-init:1.0.1
+          env:
+            - name: OPENSEARCH_DASHBOARD_HOST
+              value: https://opensearch-dashboards:5601
+            - name: OPENSEARCH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: opensearch
+                  key: password
+  backoffLimit: 40

@@ -1,0 +1,16 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: postgresql-exporter
+  namespace: monitoring
+spec:
+  selector:
+    matchLabels:
+      cluster-name: psi-minimal-cluster
+  endpoints:
+    - port: http-metrics # Der Port des Exporters (standardmäßig ist es `9187`)
+      interval: 30s
+      path: /metrics
+  namespaceSelector:
+    matchNames:
+      - default # Namespace des Postgres Clusters

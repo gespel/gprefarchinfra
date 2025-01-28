@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: opensearch-dashboards
+  namespace: default
+  annotations:
+    cloud.google.com/neg: '{"ingress": true}'
+    cloud.google.com/app-protocols: '{"http":"HTTP"}'
+    cloud.google.com/neg-status-verbosity: "FULL"
+    cloud.google.com/neg-status-uptime-checks-enable: "true"
+spec:
+  selector:
+    app: opensearch-dashboards
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5601
+  type: NodePort
