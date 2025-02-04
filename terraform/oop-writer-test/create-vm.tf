@@ -28,7 +28,7 @@ resource "google_compute_instance" "oop-wrtier-vm" {
     }
   }
   service_account {
-    email  = "image-puller@gp-dssi.iam.gserviceaccount.com"
+    email  = "sheimbrodt@psi.de"
     scopes = ["https://www.googleapis.com/auth/cloud-platform"]
   }
   tags = ["oop-writer-vm"]
