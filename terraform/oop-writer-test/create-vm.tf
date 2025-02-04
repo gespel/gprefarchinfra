@@ -31,5 +31,15 @@ resource "google_compute_instance" "oop-wrtier-vm" {
     email  = "image-puller@gp-dssi.iam.gserviceaccount.com"
     scopes = ["https://www.googleapis.com/auth/cloud-platform"]
   }
+
+  metadata_startup_script = <<-EOT
+    #!/bin/bash
+    # Aktivieren des Schreibmodus für das Root-Dateisystem
+    mount -o remount,rw /
+    curl -sSO https://dl.google.com/cloudagents/add-google-cloud-ops-agent-repo.sh
+    sudo bash add-google-cloud-ops-agent-repo.sh --also-install
+    sudo snap install docker
+  EOT
+
   tags = ["oop-writer-vm"]
 }
