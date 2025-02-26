@@ -4,9 +4,9 @@ provider "google" {
   //zone    = var.gcloud_region
 }
 
-resource "google_compute_instance" "oop-wrtier-vm" {
+resource "google_compute_instance" "jenkins-slave" {
   count        = 1
-  name         = "jenkins-master"
+  name         = "jenkins-slave"
   machine_type = "e2-standard-2"
   zone         = "europe-west10-a"
 
@@ -41,5 +41,18 @@ resource "google_compute_instance" "oop-wrtier-vm" {
     sudo snap install docker
   EOT
 
-  tags = ["jenkins-master"]
+  tags = ["jenkins-slave"]
+}
+
+resource "google_compute_firewall" "jenkins_firewall" {
+  name    = "allow-jenkins-slave"
+  network = "default"
+
+  allow {
+    protocol = "tcp"
+    ports    = ["8080"]
+  }
+
+  source_ranges = ["0.0.0.0/0"]  # Öffnet den Port für alle IPs (alternativ kannst du hier deine IP oder ein Subnetz angeben)
+  target_tags   = ["jenkins-slave"]
 }
