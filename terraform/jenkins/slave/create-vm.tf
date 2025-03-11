@@ -4,9 +4,9 @@ provider "google" {
   //zone    = var.gcloud_region
 }
 
-resource "google_compute_instance" "jenkins-slave" {
+resource "google_compute_instance" "srv1" {
   count        = 1
-  name         = "jenkins-slave"
+  name         = "workersrv1"
   machine_type = "e2-standard-2"
   zone         = "europe-west10-a"
 
@@ -23,9 +23,6 @@ resource "google_compute_instance" "jenkins-slave" {
 
   network_interface {
     network = "default"
-
-    access_config {
-    }
   }
   service_account {
     email  = "image-puller@gp-dssi.iam.gserviceaccount.com"
@@ -42,17 +39,4 @@ resource "google_compute_instance" "jenkins-slave" {
   EOT
 
   tags = ["jenkins-slave"]
-}
-
-resource "google_compute_firewall" "jenkins_firewall" {
-  name    = "allow-jenkins-slave"
-  network = "default"
-
-  allow {
-    protocol = "tcp"
-    ports    = ["8080"]
-  }
-
-  source_ranges = ["0.0.0.0/0"]  # Öffnet den Port für alle IPs (alternativ kannst du hier deine IP oder ein Subnetz angeben)
-  target_tags   = ["jenkins-slave"]
 }
