@@ -18,6 +18,7 @@ resource "google_compute_instance" "gitlab" {
   boot_disk {
     initialize_params {
       image = "opensuse-leap-15-6-v20241004-x86-64"
+      #eher familie als explizit
     }
   }
 
