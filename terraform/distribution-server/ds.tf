@@ -4,6 +4,14 @@ provider "google" {
   //zone    = var.gcloud_region
 }
 
+resource "google_compute_disk" "ds-disk" {
+    name         = "ds-disk"
+    image        = "opensuse-leap-15-6-v20241004-x86-64"
+    zone         = "europe-west10-a"
+    type         = "pd-balanced"
+    size         = 150
+}
+
 resource "google_compute_instance" "distribution_server" {
   count        = 1
   name         = "distribution-server"
@@ -16,9 +24,7 @@ resource "google_compute_instance" "distribution_server" {
   }
 
   boot_disk {
-    initialize_params {
-      image = "opensuse-leap-15-6-v20241004-x86-64"
-    }
+    source = google_compute_disk.ds-disk.self_link
   }
 
   network_interface {
